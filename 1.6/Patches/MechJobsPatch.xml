@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Patch>
+    <Operation Class="PatchOperationInsert">
+        <xpath>Defs/ThinkTreeDef[defName="Mechanoid"]//li[@Class="JobGiver_Work"]</xpath>
+        <value>
+		<li Class="GITM.JobGiver_UnnervingFixation"/>
+		<li Class="GITM.JobGiver_WatchOverLovedOne"/>
+		<li Class="GITM.JobGiver_ObserveFire" />
+		<li Class="GITM.JobGiver_ObserveCorpse" />
+		<li Class="GITM.JobGiver_HuntSmallAnimal" />
+		<li Class="GITM.JobGiver_ObserveDrugs" />
+		<li Class="GITM.JobGiver_MechDrawOnFloor" />
+		<li Class="GITM.JobGiver_ObserveTheNight" />
+		<li Class="GITM.JobGiver_ObserveFood" />
+		<li Class="GITM.JobGiver_GoUnderground" />
+		<li Class="GITM.JobGiver_PlayWithAnimal" />
+        </value>
+    </Operation>
+</Patch>

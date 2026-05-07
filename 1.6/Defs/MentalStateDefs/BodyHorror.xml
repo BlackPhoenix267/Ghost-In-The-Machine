@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  <MentalStateDef>
+    <defName>GITM_DysphoricHorrorState</defName>
+    <stateClass>GITM.MentalState_DysphoricHorror</stateClass>
+    <label>dysphoric horror</label>
+    <description>This mechanoid's subcore is experiencing severe dysphoria due to its Body Purist trait, horrified by its mechanical shell.</description>
+    <category>Misc</category>
+    <baseInspectLine>Mental state: Dysphoric horror</baseInspectLine>
+    <recoverFromSleep>false</recoverFromSleep>
+    <allowBeatfire>true</allowBeatfire>
+    <minTicksBeforeRecovery>7500</minTicksBeforeRecovery>
+    <maxTicksBeforeRecovery>12500</maxTicksBeforeRecovery>
+  </MentalStateDef>
+
+  <ThinkTreeDef>
+    <defName>GITM_DysphoricHorrorTree</defName>
+    <insertTag>MentalState_Misc</insertTag>
+    <thinkRoot Class="ThinkNode_Priority">
+      <subNodes>
+        <li Class="ThinkNode_ConditionalMentalState">
+          <state>GITM_DysphoricHorrorState</state>
+          <subNodes>
+            <li Class="GITM.JobGiver_DysphoricHorror" />
+          </subNodes>
+        </li>
+      </subNodes>
+    </thinkRoot>
+  </ThinkTreeDef>
+
+  <JobDef>
+    <defName>GITM_ScrapeWall</defName>
+    <driverClass>GITM.JobDriver_ScrapeWall</driverClass>
+    <reportString>trying to scrape it off.</reportString>
+    <casualInterruptible>false</casualInterruptible>
+  </JobDef>
+
+  <JobDef>
+    <defName>GITM_WashAway</defName>
+    <driverClass>JobDriver_Wait</driverClass>
+    <reportString>trying to wash it away.</reportString>
+    <casualInterruptible>false</casualInterruptible>
+  </JobDef>
+
+  <JobDef>
+    <defName>GITM_ErraticPacing</defName>
+    <driverClass>JobDriver_Goto</driverClass>
+    <reportString>pacing erratically.</reportString>
+    <casualInterruptible>false</casualInterruptible>
+  </JobDef>
+
+</Defs>

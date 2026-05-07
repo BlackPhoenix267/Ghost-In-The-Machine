@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Patch>
+
+    <Operation Class="PatchOperationSequence">
+        <success>Always</success>
+        <operations>
+            
+            <li Class="PatchOperationAdd">
+                <xpath>Defs/RecipeDef[ingredients/li/filter/thingDefs/li="SubcoreBasic"]/ingredients/li[filter/thingDefs/li="SubcoreBasic"]/filter[not(categories)]</xpath>
+                <value>
+                    <categories/>
+                </value>
+            </li>
+            
+            <li Class="PatchOperationAdd">
+                <xpath>Defs/RecipeDef[ingredients/li/filter/thingDefs/li="SubcoreBasic"]/ingredients/li[filter/thingDefs/li="SubcoreBasic"]/filter/categories</xpath>
+                <value>
+                    <li>GITM_SubcoresBasicOrHigher</li>
+                </value>
+            </li>
+            
+            <li Class="PatchOperationRemove">
+                <xpath>Defs/RecipeDef[ingredients/li/filter/categories/li="GITM_SubcoresBasicOrHigher"]/ingredients/li/filter/thingDefs/li[.="SubcoreBasic"]</xpath>
+            </li>
+
+            <li Class="PatchOperationAdd">
+                <xpath>Defs/RecipeDef[ingredients/li/filter/categories/li="GITM_SubcoresBasicOrHigher"][not(fixedIngredientFilter)]</xpath>
+                <value>
+                    <fixedIngredientFilter/>
+                </value>
+            </li>
+            <li Class="PatchOperationAdd">
+                <xpath>Defs/RecipeDef[ingredients/li/filter/categories/li="GITM_SubcoresBasicOrHigher"]/fixedIngredientFilter[not(categories)]</xpath>
+                <value>
+                    <categories/>
+                </value>
+            </li>
+            <li Class="PatchOperationAdd">
+                <xpath>Defs/RecipeDef[ingredients/li/filter/categories/li="GITM_SubcoresBasicOrHigher"]/fixedIngredientFilter/categories</xpath>
+                <value>
+                    <li>GITM_SubcoresBasicOrHigher</li>
+                </value>
+            </li>
+
+            <li Class="PatchOperationAdd">
+                <xpath>Defs/RecipeDef[ingredients/li/filter/categories/li="GITM_SubcoresBasicOrHigher"][not(defaultIngredientFilter)]</xpath>
+                <value>
+                    <defaultIngredientFilter/>
+                </value>
+            </li>
+            <li Class="PatchOperationAdd">
+                <xpath>Defs/RecipeDef[ingredients/li/filter/categories/li="GITM_SubcoresBasicOrHigher"]/defaultIngredientFilter[not(thingDefs)]</xpath>
+                <value>
+                    <thingDefs/>
+                </value>
+            </li>
+            <li Class="PatchOperationAdd">
+                <xpath>Defs/RecipeDef[ingredients/li/filter/categories/li="GITM_SubcoresBasicOrHigher"]/defaultIngredientFilter/thingDefs[not(li="SubcoreBasic")]</xpath>
+                <value>
+                    <li>SubcoreBasic</li>
+                </value>
+            </li>
+            
+        </operations>
+    </Operation>
+
+    <Operation Class="PatchOperationSequence">
+        <success>Always</success>
+        <operations>
+            
+            <li Class="PatchOperationAdd">
+                <xpath>Defs/RecipeDef[ingredients/li/filter/thingDefs/li="SubcoreRegular"]/ingredients/li[filter/thingDefs/li="SubcoreRegular"]/filter[not(categories)]</xpath>
+                <value>
+                    <categories/>
+                </value>
+            </li>
+            
+            <li Class="PatchOperationAdd">
+                <xpath>Defs/RecipeDef[ingredients/li/filter/thingDefs/li="SubcoreRegular"]/ingredients/li[filter/thingDefs/li="SubcoreRegular"]/filter/categories</xpath>
+                <value>
+                    <li>GITM_SubcoresStandardOrHigher</li>
+                </value>
+            </li>
+            
+            <li Class="PatchOperationRemove">
+                <xpath>Defs/RecipeDef[ingredients/li/filter/categories/li="GITM_SubcoresStandardOrHigher"]/ingredients/li/filter/thingDefs/li[.="SubcoreRegular"]</xpath>
+            </li>
+
+            <li Class="PatchOperationAdd">
+                <xpath>Defs/RecipeDef[ingredients/li/filter/categories/li="GITM_SubcoresStandardOrHigher"][not(fixedIngredientFilter)]</xpath>
+                <value>
+                    <fixedIngredientFilter/>
+                </value>
+            </li>
+            <li Class="PatchOperationAdd">
+                <xpath>Defs/RecipeDef[ingredients/li/filter/categories/li="GITM_SubcoresStandardOrHigher"]/fixedIngredientFilter[not(categories)]</xpath>
+                <value>
+                    <categories/>
+                </value>
+            </li>
+            <li Class="PatchOperationAdd">
+                <xpath>Defs/RecipeDef[ingredients/li/filter/categories/li="GITM_SubcoresStandardOrHigher"]/fixedIngredientFilter/categories</xpath>
+                <value>
+                    <li>GITM_SubcoresStandardOrHigher</li>
+                </value>
+            </li>
+
+            <li Class="PatchOperationAdd">
+                <xpath>Defs/RecipeDef[ingredients/li/filter/categories/li="GITM_SubcoresStandardOrHigher"][not(defaultIngredientFilter)]</xpath>
+                <value>
+                    <defaultIngredientFilter/>
+                </value>
+            </li>
+            <li Class="PatchOperationAdd">
+                <xpath>Defs/RecipeDef[ingredients/li/filter/categories/li="GITM_SubcoresStandardOrHigher"]/defaultIngredientFilter[not(thingDefs)]</xpath>
+                <value>
+                    <thingDefs/>
+                </value>
+            </li>
+            <li Class="PatchOperationAdd">
+                <xpath>Defs/RecipeDef[ingredients/li/filter/categories/li="GITM_SubcoresStandardOrHigher"]/defaultIngredientFilter/thingDefs[not(li="SubcoreRegular")]</xpath>
+                <value>
+                    <li>SubcoreRegular</li>
+                </value>
+            </li>
+            
+        </operations>
+    </Operation>
+
+</Patch>

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+
+    <JobDef>
+        <defName>GITM_UnnervingPractice</defName>
+        <driverClass>GITM.JobDriver_UnnervingPractice</driverClass>
+        <reportString>pacing erratically.</reportString>
+        <allowOpportunisticPrefix>true</allowOpportunisticPrefix>
+    </JobDef>
+
+    <JobDef>
+        <defName>GITM_UnnervingStalking</defName>
+        <driverClass>GITM.JobDriver_UnnervingStalking</driverClass>
+        <reportString>staring blankly at TargetA.</reportString>
+        <allowOpportunisticPrefix>true</allowOpportunisticPrefix>
+    </JobDef>
+
+    <ThoughtDef>
+        <defName>GITM_DisturbedSleepMalicious</defName>
+        <durationDays>1</durationDays>
+        <stages>
+            <li>
+                <label>disturbed sleep (malicious)</label>
+                <description>A mech stood right outside my room while I was sleeping and... did something. It wasn't just noise- it sounded like rhythm. Like it was practicing for something.</description>
+                <baseMoodEffect>-8</baseMoodEffect>
+            </li>
+        </stages>
+    </ThoughtDef>
+
+    <ThoughtDef>
+        <defName>GITM_UnnervingStalkingThought</defName>
+        <durationDays>1</durationDays>
+        <stages>
+            <li>
+                <label>unnerving stalking</label>
+                <description>That mech just stood there staring at me. I could hear its targeting sensors clicking. I think it was planning something.</description>
+                <baseMoodEffect>-5</baseMoodEffect>
+            </li>
+        </stages>
+    </ThoughtDef>
+
+<ThoughtDef>
+    <defName>GITM_DisturbingMechThought</defName>
+    <workerClass>GITM.ThoughtWorker_DisturbingMech</workerClass>
+    <validWhileDespawned>false</validWhileDespawned>
+    <stages>
+      <li>
+        <label>disturbing mech</label>
+        <description>There's something incredibly unnerving about the way that machine moves and sounds. Somehow being mute and faceless makes it even worse.</description>
+        <baseMoodEffect>-10</baseMoodEffect>
+      </li>
+    </stages>
+  </ThoughtDef>
+
+</Defs>

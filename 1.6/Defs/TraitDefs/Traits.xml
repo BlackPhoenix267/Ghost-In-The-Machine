@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+    <TraitDef>
+        <defName>GITM_Child</defName>
+        <commonality>0</commonality> <degreeDatas>
+            <li>
+                <label>child brain</label>
+                <description>This mechanoid's subcore was formatted from the scan of a child. It retains certain impulsive and malleable characteristics of youth.</description>
+            </li>
+        </degreeDatas>
+    </TraitDef>
+</Defs>

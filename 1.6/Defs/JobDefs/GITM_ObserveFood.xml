@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+
+  <JobDef>
+    <defName>GITM_ObserveFood</defName>
+    <driverClass>GITM.JobDriver_ObserveFood</driverClass>
+    <reportString>staring longingly at TargetA.</reportString>
+    <joyDuration>7500</joyDuration>
+    <allowOpportunisticPrefix>true</allowOpportunisticPrefix>
+  </JobDef>
+
+</Defs>

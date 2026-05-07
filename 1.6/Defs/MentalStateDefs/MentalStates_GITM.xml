@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+
+  <MentalStateDef>
+    <defName>GITM_RescuingPawn</defName>
+    <stateClass>GITM.MentalState_RescuingPawn</stateClass> 
+    <label>frantic rescue</label>
+    <description>This mechanoid's subcore is panicking over a downed loved one. It will ignore all commands until it can rescue them.</description>
+    <category>Misc</category> <baseInspectLine>Mental state: Rescuing loved one</baseInspectLine>
+    <recoverFromSleep>false</recoverFromSleep>
+    <allowBeatfire>true</allowBeatfire>
+    <blockNormalThoughts>false</blockNormalThoughts>
+    </MentalStateDef>
+
+<MentalStateDef>
+    <defName>GITM_PeacefulDeparture</defName>
+    <stateClass>MentalState_GiveUpExit</stateClass>
+    <label>peaceful departure</label>
+    <description>Due to retained inherent kindness, this mechanoid refuses to turn against its former masters and is leaving the area.</description>
+    <category>Misc</category>
+    <nameColor>(0.3, 0.8, 0.3)</nameColor>
+    <beginLetterLabel>Peaceful departure</beginLetterLabel>
+    <beginLetter>{0} has gone feral, but its retained 'Kind' trait prevents it from becoming hostile. It is peacefully leaving the map instead.</beginLetter>
+    <beginLetterDef>NeutralEvent</beginLetterDef>
+    <recoveryMessage>{0} has stopped leaving.</recoveryMessage>
+    <baseInspectLine>State: Peaceful departure</baseInspectLine>
+    <allowBeatfire>false</allowBeatfire>
+  </MentalStateDef>
+
+</Defs>

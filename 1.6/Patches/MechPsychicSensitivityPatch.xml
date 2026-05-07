@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Patch>
+
+  <!-- ============================================== -->
+  <!-- HIGH SUBCORE MECHS (Psychic Sensitivity: 0.75) -->
+  <!-- ============================================== -->
+  <Operation Class="PatchOperationRemove">
+    <success>Always</success>
+    <xpath>Defs/ThingDef[
+      defName="Mech_Legionary" or 
+      defName="Mech_Tesseron" or 
+      defName="Mech_Fabricor" or 
+      defName="Mech_Paramedic"
+    ]/statBases/PsychicSensitivity</xpath>
+  </Operation>
+
+  <Operation Class="PatchOperationAdd">
+    <xpath>Defs/ThingDef[
+      defName="Mech_Legionary" or 
+      defName="Mech_Tesseron" or 
+      defName="Mech_Fabricor" or 
+      defName="Mech_Paramedic"
+    ]/statBases</xpath>
+    <value>
+      <PsychicSensitivity>0.75</PsychicSensitivity>
+    </value>
+  </Operation>
+
+  <!-- ============================================== -->
+  <!-- BASIC SUBCORE MECHS (Psychic Sensitivity: 0)   -->
+  <!-- ============================================== -->
+  <Operation Class="PatchOperationRemove">
+    <success>Always</success>
+    <xpath>Defs/ThingDef[
+      defName="Mech_Militor" or 
+      defName="Mech_Lifter" or 
+      defName="Mech_Constructoid" or 
+      defName="Mech_Cleansweeper" or 
+      defName="Mech_Agrihand"
+    ]/statBases/PsychicSensitivity</xpath>
+  </Operation>
+
+  <Operation Class="PatchOperationAdd">
+    <xpath>Defs/ThingDef[
+      defName="Mech_Militor" or 
+      defName="Mech_Lifter" or 
+      defName="Mech_Constructoid" or 
+      defName="Mech_Cleansweeper" or 
+      defName="Mech_Agrihand"
+    ]/statBases</xpath>
+    <value>
+      <PsychicSensitivity>0</PsychicSensitivity>
+    </value>
+  </Operation>
+
+  <!-- ============================================== -->
+  <!-- APOCRITON (Psychic Sensitivity: 1.0)           -->
+  <!-- ============================================== -->
+  <Operation Class="PatchOperationRemove">
+    <success>Always</success>
+    <xpath>Defs/ThingDef[defName="Mech_Apocriton"]/statBases/PsychicSensitivity</xpath>
+  </Operation>
+
+  <Operation Class="PatchOperationAdd">
+    <xpath>Defs/ThingDef[defName="Mech_Apocriton"]/statBases</xpath>
+    <value>
+      <PsychicSensitivity>1.0</PsychicSensitivity>
+    </value>
+  </Operation>
+
+</Patch>

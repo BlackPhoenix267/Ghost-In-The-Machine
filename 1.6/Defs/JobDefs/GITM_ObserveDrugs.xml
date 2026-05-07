@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+
+  <JobDef>
+    <defName>GITM_ObserveDrugs</defName>
+    <driverClass>GITM.JobDriver_ObserveDrugs</driverClass>
+    <reportString>observing drugs.</reportString>
+    <casualInterruptible>true</casualInterruptible>
+    <allowOpportunisticPrefix>true</allowOpportunisticPrefix>
+  </JobDef>
+
+</Defs>

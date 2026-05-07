@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+
+    <JobDef>
+        <defName>GITM_WatchOverTarget</defName>
+        <driverClass>GITM.JobDriver_WatchOverLovedOne</driverClass>
+        <reportString>watching over TargetA.</reportString>
+        <allowOpportunisticPrefix>true</allowOpportunisticPrefix>
+    </JobDef>
+
+    <ThoughtDef>
+        <defName>GITM_WatchedWhileSleeping</defName>
+        <durationDays>1</durationDays>
+        <stages>
+            <li>
+                <label>watched while sleeping</label>
+                <description>I woke up and realized my mechanoid was just standing there... staring at me while I slept. I know it thinks it's protecting me, but it's still creepy.</description>
+                <baseMoodEffect>-5</baseMoodEffect>
+            </li>
+        </stages>
+    </ThoughtDef>
+
+</Defs>

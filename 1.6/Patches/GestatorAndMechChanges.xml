@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Patch>
+  <Operation Class="PatchOperationSequence">
+    <operations>
+
+      <li Class="PatchOperationConditional">
+        <xpath>Defs/ThingDef[thingClass="Building_MechGestator"]/comps</xpath>
+        <match Class="PatchOperationAdd">
+          <xpath>Defs/ThingDef[thingClass="Building_MechGestator"]/comps</xpath>
+          <value>
+            <li Class="GITM.CompProperties_GestatorSkillMemory"/>
+          </value>
+        </match>
+        <nomatch Class="PatchOperationAdd">
+          <xpath>Defs/ThingDef[thingClass="Building_MechGestator"]</xpath>
+          <value>
+            <comps>
+              <li Class="GITM.CompProperties_GestatorSkillMemory"/>
+            </comps>
+          </value>
+        </nomatch>
+      </li>
+
+      <li Class="PatchOperationConditional">
+        <xpath>Defs/ThingDef[@Name="BaseMechanoid"]/comps</xpath>
+        <match Class="PatchOperationAdd">
+          <xpath>Defs/ThingDef[@Name="BaseMechanoid"]/comps</xpath>
+          <value>
+            <li Class="GITM.CompProperties_MechSkillMemory"/>
+          </value>
+        </match>
+        <nomatch Class="PatchOperationAdd">
+          <xpath>Defs/ThingDef[@Name="BaseMechanoid"]</xpath>
+          <value>
+            <comps>
+              <li Class="GITM.CompProperties_MechSkillMemory"/>
+            </comps>
+          </value>
+        </nomatch>
+      </li>
+
+    </operations>
+  </Operation>
+</Patch>

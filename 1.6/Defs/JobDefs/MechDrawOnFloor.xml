@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+
+  <JobDef>
+    <defName>GITM_MechDrawOnFloor</defName>
+    <driverClass>GITM.JobDriver_MechDrawOnFloor</driverClass>
+    <reportString>drawing on the floor.</reportString>
+    <casualInterruptible>true</casualInterruptible>
+    <allowOpportunisticPrefix>true</allowOpportunisticPrefix>
+    <suspendable>true</suspendable>
+  </JobDef>
+
+</Defs>

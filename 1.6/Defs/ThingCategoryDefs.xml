@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+    <ThingCategoryDef>
+        <defName>GITM_SubcoresBasicOrHigher</defName>
+        <label>basic subcores (or higher)</label>
+        <parent>Manufactured</parent>
+    </ThingCategoryDef>
+
+    <ThingCategoryDef>
+        <defName>GITM_SubcoresStandardOrHigher</defName>
+        <label>standard subcores (or higher)</label>
+        <parent>Manufactured</parent>
+    </ThingCategoryDef>
+</Defs>

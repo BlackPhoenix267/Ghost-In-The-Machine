@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Patch>
+    <Operation Class="PatchOperationConditional">
+        <xpath>Defs/ThingDef[defName="SubcoreBasic"]/thingCategories</xpath>
+        <match Class="PatchOperationAdd">
+            <xpath>Defs/ThingDef[defName="SubcoreBasic"]/thingCategories</xpath>
+            <value>
+                <li>GITM_SubcoresBasicOrHigher</li>
+            </value>
+        </match>
+        <nomatch Class="PatchOperationAdd">
+            <xpath>Defs/ThingDef[defName="SubcoreBasic"]</xpath>
+            <value>
+                <thingCategories>
+                    <li>GITM_SubcoresBasicOrHigher</li>
+                </thingCategories>
+            </value>
+        </nomatch>
+    </Operation>
+
+    <Operation Class="PatchOperationConditional">
+        <xpath>Defs/ThingDef[defName="SubcoreRegular"]/thingCategories</xpath>
+        <match Class="PatchOperationAdd">
+            <xpath>Defs/ThingDef[defName="SubcoreRegular"]/thingCategories</xpath>
+            <value>
+                <li>GITM_SubcoresBasicOrHigher</li>
+                <li>GITM_SubcoresStandardOrHigher</li>
+            </value>
+        </match>
+        <nomatch Class="PatchOperationAdd">
+            <xpath>Defs/ThingDef[defName="SubcoreRegular"]</xpath>
+            <value>
+                <thingCategories>
+                    <li>GITM_SubcoresBasicOrHigher</li>
+                    <li>GITM_SubcoresStandardOrHigher</li>
+                </thingCategories>
+            </value>
+        </nomatch>
+    </Operation>
+
+    <Operation Class="PatchOperationConditional">
+        <xpath>Defs/ThingDef[defName="SubcoreHigh"]/thingCategories</xpath>
+        <match Class="PatchOperationAdd">
+            <xpath>Defs/ThingDef[defName="SubcoreHigh"]/thingCategories</xpath>
+            <value>
+                <li>GITM_SubcoresBasicOrHigher</li>
+                <li>GITM_SubcoresStandardOrHigher</li>
+            </value>
+        </match>
+        <nomatch Class="PatchOperationAdd">
+            <xpath>Defs/ThingDef[defName="SubcoreHigh"]</xpath>
+            <value>
+                <thingCategories>
+                    <li>GITM_SubcoresBasicOrHigher</li>
+                    <li>GITM_SubcoresStandardOrHigher</li>
+                </thingCategories>
+            </value>
+        </nomatch>
+    </Operation>
+</Patch>
