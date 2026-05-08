@@ -22,25 +22,24 @@ namespace GITM
             brain = pawn.health.hediffSet.GetBrain();
             if (brain == null) return 1f; // 100% damaged if brain is missing
 
-            // 1. Calculate physical integrity
+            // Calculate physical integrity
             float maxHealth = brain.def.GetMaxHealth(pawn);
             float currentHealth = pawn.health.hediffSet.GetPartHealth(brain);
             float physicalIntegrity = currentHealth / maxHealth;
 
-            // 2. Calculate rot-based integrity loss
+            // Calculate rot-based integrity loss
             float rotFraction = 0f;
             CompRottable compRot = corpse.GetComp<CompRottable>();
             if (compRot != null && compRot.PropsRot != null)
             {
-                // TicksToDessicated is the point where the corpse becomes a skeleton (brain is entirely gone conceptually)
-                float maxRotTicks = compRot.PropsRot.TicksToDessicated;
+                float maxRotTicks = compRot.PropsRot.TicksToRotStart;
                 rotFraction = Mathf.Clamp01(compRot.RotProgress / maxRotTicks);
             }
 
             // Lerp between initial and final settings based on how far along the rot progress is
             float rotIntegrity = Mathf.Lerp(GITM_Mod.settings.initialCorpseBrainIntegrity, GITM_Mod.settings.finalCorpseBrainIntegrity, rotFraction);
 
-            // 3. Combine them. If either is 0, integrity is 0.
+            // Combine them. If either is 0, integrity is 0.
             float totalIntegrity = physicalIntegrity * rotIntegrity;
             return Mathf.Clamp01(1f - totalIntegrity); // Return as damage percentage
         }
@@ -129,33 +128,30 @@ namespace GITM
         public static void PerformCorpseScan(Building_SubcoreScanner scanner, Corpse corpse)
         {
             float brainDamage = CalculateCorpseBrainDamage(corpse, out BodyPartRecord brain);
-            
-            // 1. Generate Subcore Data
+
+            // Generate Subcore Data
             bool isHighTier = scanner.def.building.subcoreScannerOutputDef.defName.Contains("High");
             ScanState state = ExtractScanData(corpse.InnerPawn, isHighTier, brainDamage);
 
-            // 2. Destroy the Corpse's brain
-            if (brain != null)
+            // Destroy the Corpse's brain
+            if (brain != null && corpse.InnerPawn.health != null)
             {
-                int damageAmount = 9999; // Ensure total destruction
-                DamageInfo dinfo = new DamageInfo(DamageDefOf.SurgicalCut, damageAmount, 999f, -1f, null, brain, null, DamageInfo.SourceCategory.ThingOrUnknown, null, true, true);
-                corpse.InnerPawn.TakeDamage(dinfo);
+                Hediff missingPart = HediffMaker.MakeHediff(HediffDefOf.MissingBodyPart, corpse.InnerPawn, brain);
+                corpse.InnerPawn.health.AddHediff(missingPart);
             }
 
-            // 3. Consume scanner ingredients (if any are loaded/required)
-            
-            // If the building uses CompIngredients to track what was put in, clear the underlying list:
+            // Consume scanner ingredients (if any are loaded/required)
             var compIngredients = scanner.GetComp<CompIngredients>();
             if (compIngredients != null)
             {
                 compIngredients.ingredients.Clear();
             }
 
-            // CRITICAL: To actually consume the physical materials (Steel, Components, etc.) 
+            // To actually consume the physical materials (Steel, Components, etc.) 
             // loaded into the scanner so the player doesn't get them back:
             scanner.GetDirectlyHeldThings()?.ClearAndDestroyContents();
-            
-            // 4. Spawn the subcore
+
+            // Spawn the subcore
             Thing subcore = ThingMaker.MakeThing(scanner.def.building.subcoreScannerOutputDef);
             var comp = subcore.TryGetComp<CompSubcoreSkillMemory>();
             if (comp != null)

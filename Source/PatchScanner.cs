@@ -1,6 +1,7 @@
 using HarmonyLib;
 using RimWorld;
 using Verse;
+using Verse.AI;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -53,7 +54,7 @@ namespace GITM
                     {
                         string outputDef = __instance.def.building.subcoreScannerOutputDef.defName;
                         bool isHighTier = (outputDef == "SubcoreHigh" || outputDef.Contains("High"));
-                        
+
                         float brainDamagePercent = 0f;
                         BodyPartRecord brain = occupant.health.hediffSet.GetBrain();
                         if (brain != null)
@@ -126,15 +127,13 @@ namespace GITM
                 yield return v;
             }
 
-            // Only show on the Ripscanner (not softscanner), and only if it's fueled/ready.
-            // Adjust the defName check if your Ripscanner has a different defName.
             if (__instance.def.defName == "SubcoreRipscanner" && __instance.State == SubcoreScannerState.WaitingForOccupant)
             {
                 yield return new Command_Target
                 {
                     defaultLabel = "Ripscan Corpse",
                     defaultDesc = "Extract a high subcore from an eligible colonist corpse. Factors in rot and existing damage. Destroys the brain.",
-                    icon = ContentFinder<Texture2D>.Get("UI/Designators/ExtractSkull", true), // Fallback icon, change as desired
+                    icon = ContentFinder<Texture2D>.Get("UI/Designators/ExtractSkull", true),
                     targetingParams = new TargetingParameters
                     {
                         canTargetItems = true,
@@ -149,7 +148,7 @@ namespace GITM
                                 {
                                     float dmg = CorpseScanUtility.CalculateCorpseBrainDamage(corpse, out BodyPartRecord brain);
                                     // Valid if brain exists and damage is less than 100%
-                                    return brain != null && dmg < 1f; 
+                                    return brain != null && dmg < 1f;
                                 }
                             }
                             return false;
@@ -160,7 +159,28 @@ namespace GITM
                         Corpse corpse = target.Thing as Corpse;
                         if (corpse != null)
                         {
-                            CorpseScanUtility.PerformCorpseScan(__instance, corpse);
+                            // Find the closest capable and available colonist
+                            Pawn hauler = __instance.Map.mapPawns.FreeColonistsSpawned
+                                .Where(p => !p.Downed && !p.Dead &&
+                                            p.health.capacities.CapableOf(PawnCapacityDefOf.Manipulation) &&
+                                            p.CanReserveAndReach(corpse, PathEndMode.Touch, Danger.Deadly) &&
+                                            p.CanReserveAndReach(__instance, PathEndMode.Touch, Danger.Deadly))
+                                .OrderBy(p => p.Position.DistanceToSquared(corpse.Position))
+                                .FirstOrDefault();
+
+                            if (hauler != null)
+                            {
+                                JobDef jobDef = DefDatabase<JobDef>.GetNamed("GITM_CarryCorpseToRipscanner");
+                                Job job = JobMaker.MakeJob(jobDef, corpse, __instance);
+                                job.count = 1;
+                                hauler.jobs.TryTakeOrderedJob(job, JobTag.Misc);
+
+                                Messages.Message($"{hauler.LabelShort} is hauling {corpse.InnerPawn.LabelShort}'s body to the ripscanner.", hauler, MessageTypeDefOf.NeutralEvent);
+                            }
+                            else
+                            {
+                                Messages.Message("No available colonists to haul the corpse.", MessageTypeDefOf.RejectInput);
+                            }
                         }
                     }
                 };

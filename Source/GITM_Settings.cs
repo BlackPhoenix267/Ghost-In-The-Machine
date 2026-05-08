@@ -8,10 +8,8 @@ namespace GITM
         public int standardSkillCap = 14;
         public float standardLearningRate = 0f;
         public float highLearningRate = 0.25f;
-        
-        // New variables for corpse brain integrity
         public float initialCorpseBrainIntegrity = 1.0f;
-        public float finalCorpseBrainIntegrity = 0.2f;
+        public float finalCorpseBrainIntegrity = 0.0f;
 
         public override void ExposeData()
         {
@@ -21,7 +19,7 @@ namespace GITM
             Scribe_Values.Look(ref highLearningRate, "highLearningRate", 0.25f);
             
             Scribe_Values.Look(ref initialCorpseBrainIntegrity, "initialCorpseBrainIntegrity", 1.0f);
-            Scribe_Values.Look(ref finalCorpseBrainIntegrity, "finalCorpseBrainIntegrity", 0.2f);
+            Scribe_Values.Look(ref finalCorpseBrainIntegrity, "finalCorpseBrainIntegrity", 0.0f);
         }
     }
 
@@ -51,13 +49,13 @@ namespace GITM
             listingStandard.Gap();
 
             listingStandard.Label($"Initial Corpse Brain Integrity: {settings.initialCorpseBrainIntegrity.ToStringPercent()}");
-            settings.initialCorpseBrainIntegrity = listingStandard.Slider(settings.initialCorpseBrainIntegrity, 0f, 1f);
+            settings.initialCorpseBrainIntegrity = listingStandard.Slider(settings.initialCorpseBrainIntegrity, 0f, 10f);
 
             listingStandard.Label($"Final Corpse Brain Integrity (at Dessicated): {settings.finalCorpseBrainIntegrity.ToStringPercent()}");
-            settings.finalCorpseBrainIntegrity = listingStandard.Slider(settings.finalCorpseBrainIntegrity, 0f, 1f);
+            settings.finalCorpseBrainIntegrity = listingStandard.Slider(settings.finalCorpseBrainIntegrity, -10f, 1f);
 
             listingStandard.Gap();
-            listingStandard.Label("Note: Learning rates are adjusted to compensate for the lack of passions (x0.35 multiplier). Setting config to 100% will make a mech learn as fast as a pawn with a passion. Mechs don't forget skills.");
+            listingStandard.Label("Corpses will linearly lose brain integrity as they progress towards rot, accumulating brain damage.\n\nFull rot takes 2.5 days with no refrigeration, and brain damage has essentially no effect under 10%, so for a 'perfect' mech you'll need to scan an unrefrigerated corpse in 6 hours or less (in default settings).");
 
             listingStandard.End();
             base.DoSettingsWindowContents(inRect);
