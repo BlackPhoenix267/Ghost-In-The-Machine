@@ -21,17 +21,10 @@ namespace GITM
         public float brainDamagePercent = 0f;
     }
 
+    // --- PATCH 1: LIVING PAWNS ---
     [HarmonyPatch]
     public static class Patch_SubcoreScanner_Tick
     {
-        private static readonly List<string> whitelistedTraits = new List<string> {
-            "BodyPurist", "Jealous", "Pyromaniac", "Bloodlust", "Kind",
-            "Nimble", "Brawler", "TooSmart", "FastLearner", "SlowLearner",
-            "DrugDesire", "Industriousness", "SpeedOffset", "Neurotic",
-            "ShootingAccuracy", "Disturbing", "TorturedArtist", "Cannibal",
-            "NightOwl", "Gourmand", "Undergrounder", "PsychicSensitivity"
-        };
-
         static IEnumerable<MethodBase> TargetMethods()
         {
             yield return AccessTools.Method(typeof(Building_SubcoreScanner), "Tick");
@@ -58,87 +51,20 @@ namespace GITM
 
                     if (occupant != null && occupant.skills != null)
                     {
-                        __state = new ScanState();
                         string outputDef = __instance.def.building.subcoreScannerOutputDef.defName;
-                        __state.isHighTier = (outputDef == "SubcoreHigh" || outputDef.Contains("High"));
-                        __state.sourcePawnName = occupant.Name != null ? occupant.Name.ToStringFull : occupant.LabelShort;
-
-                        Vector2 location = __instance.Map != null ? Find.WorldGrid.LongLatOf(__instance.Map.Tile) : Vector2.zero;
-                        __state.scanDate = GenDate.DateFullStringAt(GenTicks.TicksAbs, location);
+                        bool isHighTier = (outputDef == "SubcoreHigh" || outputDef.Contains("High"));
+                        
+                        float brainDamagePercent = 0f;
                         BodyPartRecord brain = occupant.health.hediffSet.GetBrain();
                         if (brain != null)
                         {
                             float maxHealth = brain.def.GetMaxHealth(occupant);
                             float currentHealth = occupant.health.hediffSet.GetPartHealth(brain);
-                            __state.brainDamagePercent = 1f - (currentHealth / maxHealth);
-
-                            // Clamp it just to be safe
-                            if (__state.brainDamagePercent < 0f) __state.brainDamagePercent = 0f;
-                            if (__state.brainDamagePercent > 1f) __state.brainDamagePercent = 1f;
+                            brainDamagePercent = Mathf.Clamp01(1f - (currentHealth / maxHealth));
                         }
 
-                        // Process Skills
-                        foreach (SkillRecord skill in occupant.skills.skills)
-                        {
-                            int level = skill.Level;
-                            if (!__state.isHighTier && level > GITM_Mod.settings.standardSkillCap)
-                            {
-                                level = GITM_Mod.settings.standardSkillCap;
-                            }
-                            __state.skills[skill.def] = level;
-                        }
-
-                        if (__state.isHighTier)
-                        {
-                            if (occupant.story != null && occupant.story.traits != null)
-                            {
-                                foreach (Trait trait in occupant.story.traits.allTraits)
-                                {
-                                    if (whitelistedTraits.Contains(trait.def.defName))
-                                    {
-                                        if (!(trait.def.defName == "DrugDesire" && (trait.Degree == 1 || trait.Degree == -1)))
-                                            __state.traits[trait.def] = trait.Degree;
-                                    }
-                                }
-
-                                if (occupant.ageTracker != null && occupant.ageTracker.AgeBiologicalYears < 13)
-                                {
-                                    TraitDef childTrait = DefDatabase<TraitDef>.GetNamedSilentFail("GITM_Child");
-                                    if (childTrait != null) __state.traits[childTrait] = 0;
-                                }
-                            }
-
-                            if (occupant.relations != null)
-                            {
-                                var possibleTargets = new List<Pawn>(PawnsFinder.AllMapsCaravansAndTravellingTransporters_Alive_FreeColonistsAndPrisoners);
-                                possibleTargets.AddRange(PawnsFinder.AllMapsCaravansAndTravellingTransporters_Alive_SlavesOfColony);
-
-                                foreach (Pawn target in possibleTargets)
-                                {
-                                    if (target == occupant) continue;
-
-                                    int opinion = occupant.relations.OpinionOf(target);
-                                    if (opinion >= 75 || opinion <= -75)
-                                    {
-                                        __state.strongRelations[target] = opinion;
-                                    }
-                                }
-
-                                if (occupant.relations.DirectRelations != null)
-                                {
-                                    foreach (DirectPawnRelation rel in occupant.relations.DirectRelations)
-                                    {
-                                        if (LovePartnerRelationUtility.IsLovePartnerRelation(rel.def))
-                                        {
-                                            if (occupant.relations.OpinionOf(rel.otherPawn) >= 75)
-                                            {
-                                                __state.formerLovers.Add(rel.otherPawn);
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
+                        // Use the shared extraction utility
+                        __state = CorpseScanUtility.ExtractScanData(occupant, isHighTier, brainDamagePercent);
                     }
                 }
             }
@@ -184,6 +110,60 @@ namespace GITM
                 comp.sourcePawnName = __state.sourcePawnName;
                 comp.scanDate = __state.scanDate;
                 comp.brainDamagePercent = __state.brainDamagePercent;
+            }
+        }
+    }
+
+    // --- PATCH 2: CORPSE SCAN GIZMO ---
+    [HarmonyPatch(typeof(Building_SubcoreScanner), "GetGizmos")]
+    public static class Patch_SubcoreScanner_GetGizmos
+    {
+        public static IEnumerable<Gizmo> Postfix(IEnumerable<Gizmo> values, Building_SubcoreScanner __instance)
+        {
+            // Yield vanilla gizmos
+            foreach (var v in values)
+            {
+                yield return v;
+            }
+
+            // Only show on the Ripscanner (not softscanner), and only if it's fueled/ready.
+            // Adjust the defName check if your Ripscanner has a different defName.
+            if (__instance.def.defName == "SubcoreRipscanner" && __instance.State == SubcoreScannerState.WaitingForOccupant)
+            {
+                yield return new Command_Target
+                {
+                    defaultLabel = "Ripscan Corpse",
+                    defaultDesc = "Extract a high subcore from an eligible colonist corpse. Factors in rot and existing damage. Destroys the brain.",
+                    icon = ContentFinder<Texture2D>.Get("UI/Designators/ExtractSkull", true), // Fallback icon, change as desired
+                    targetingParams = new TargetingParameters
+                    {
+                        canTargetItems = true,
+                        mapObjectTargetsMustBeAutoAttackable = false,
+                        validator = (TargetInfo t) =>
+                        {
+                            if (t.Thing is Corpse corpse)
+                            {
+                                Pawn p = corpse.InnerPawn;
+                                // Must be a colonist, must have a brain, must not be buried (implied by targeting)
+                                if (p != null && p.IsColonist)
+                                {
+                                    float dmg = CorpseScanUtility.CalculateCorpseBrainDamage(corpse, out BodyPartRecord brain);
+                                    // Valid if brain exists and damage is less than 100%
+                                    return brain != null && dmg < 1f; 
+                                }
+                            }
+                            return false;
+                        }
+                    },
+                    action = delegate (LocalTargetInfo target)
+                    {
+                        Corpse corpse = target.Thing as Corpse;
+                        if (corpse != null)
+                        {
+                            CorpseScanUtility.PerformCorpseScan(__instance, corpse);
+                        }
+                    }
+                };
             }
         }
     }
